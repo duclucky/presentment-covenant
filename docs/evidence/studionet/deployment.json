@@ -416,7 +416,7 @@
   },
   "chain_id": 61999,
   "contract_address": "0x2D9a2942f1700280e633E08d62528896332C480d",
-  "contract_explorer": "https://genlayer-explorer.vercel.app/address/0x2D9a2942f1700280e633E08d62528896332C480d",
+  "contract_explorer": "https://explorer-studio.genlayer.com/contracts/0x2D9a2942f1700280e633E08d62528896332C480d",
   "credit_id": "PC-20260918T002800Z",
   "depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
   "deployment": {
@@ -435,7 +435,7 @@
       "idle": 2
     }
   },
-  "explorer": "https://genlayer-explorer.vercel.app",
+  "explorer": "https://explorer-studio.genlayer.com",
   "issuer": "0xC495ef51618D03267A1f227aFe5b27B38c748272",
   "network": "studionet",
   "portal_submit_performed": false,

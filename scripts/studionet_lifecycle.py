@@ -28,7 +28,7 @@ EVIDENCE = EVIDENCE_DIR / "deployment.json"
 CHECKPOINT = EVIDENCE_DIR / "deployment-checkpoint.json"
 RPC = studionet.rpc_urls["default"]["http"][0]
 CHAIN_ID = int(studionet.id)
-EXPLORER = "https://genlayer-explorer.vercel.app"
+EXPLORER = "https://explorer-studio.genlayer.com"
 DEPENDS = "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6"
 PAYOUT_WEI = 2 * 10**18
 APPLICANT_FALLBACK = "0x017d13fe11263159470130ec1f2f96879e8fd40c"
@@ -252,7 +252,7 @@ def main() -> int:
             "source_sha256": current_source_hash,
             "depends": DEPENDS,
             "contract_address": address,
-            "contract_explorer": f"{EXPLORER}/address/{address}",
+            "contract_explorer": f"{EXPLORER}/contracts/{address}",
             "credit_id": credit_id,
             "issuer": issuer_address,
             "applicant": applicant,

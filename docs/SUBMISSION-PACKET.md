@@ -18,7 +18,7 @@ PresentmentCovenant is a contract-only GenLayer primitive for a bounded document
 ## Links and evidence
 
 - Repository: https://github.com/duclucky/presentment-covenant
-- Primary contract Explorer: https://genlayer-explorer.vercel.app/address/0x2D9a2942f1700280e633E08d62528896332C480d
+- Primary contract Explorer: https://explorer-studio.genlayer.com/contracts/0x2D9a2942f1700280e633E08d62528896332C480d
 - Deployment source commit: `0a1cb6f02a89f535a3b054b6dc62ad66782c2462` (contract source SHA-256 is recorded in the lifecycle evidence)
 - Sanitized lifecycle evidence: `docs/evidence/studionet/deployment.json`
 - Fresh canonical state verification: `docs/evidence/studionet/final-verification.json`
