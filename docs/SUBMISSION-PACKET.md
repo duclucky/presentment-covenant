@@ -19,6 +19,7 @@ PresentmentCovenant is a contract-only GenLayer primitive for a bounded document
 
 - Repository: **not published**; local project root is `ideation-lab/demand-mechanism-forge/presentment-covenant`. Publication and CI require a separate authorization.
 - Primary contract Explorer: https://genlayer-explorer.vercel.app/address/0x77BBd0FaF7600bD1dD23087B6D6E76D332683CB2
+- Deployment source commit: `25911bf991c2a372df74de49c8daccf180815bff` (contract source SHA-256 is recorded in the lifecycle evidence)
 - Sanitized lifecycle evidence: `docs/evidence/studionet/deployment.json`
 - Fresh canonical state verification: `docs/evidence/studionet/final-verification.json`
 - Target schema preflight: `docs/evidence/studionet/target-network-preflight.json`

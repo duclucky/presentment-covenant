@@ -3,6 +3,7 @@
   "verified_at_utc": "2026-09-18T00:14:35.9417491Z",
   "network": "studionet",
   "chain_id": 61999,
+  "source_commit": "25911bf991c2a372df74de49c8daccf180815bff",
   "contract_address": "0x77BBd0FaF7600bD1dD23087B6D6E76D332683CB2",
   "transaction_status": {
     "activate_credit": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"},

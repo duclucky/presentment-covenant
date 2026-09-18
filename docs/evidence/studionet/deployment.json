@@ -448,6 +448,7 @@
   "portal_submit_performed": false,
   "purse_wei": 2000000000000000000,
   "rpc": "https://studio.genlayer.com/api",
+  "source_commit": "25911bf991c2a372df74de49c8daccf180815bff",
   "source_sha256": "062765ccfa5fddaed8b800314ace6298f483764970fb6247420299721ffd7b56",
   "status": "LIFECYCLE_SUCCESS",
   "transactions": {
