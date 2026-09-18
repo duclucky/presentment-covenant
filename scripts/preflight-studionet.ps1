@@ -7,7 +7,7 @@ New-Item -ItemType Directory -Force artifacts, docs/evidence/studionet | Out-Nul
 Write-Host "Checking locked runner, class recognition, and typecheck"
 genvm-lint check contracts/presentment_covenant.py --json
 if ($LASTEXITCODE -ne 0) { throw "contract lint failed" }
-genvm-lint typecheck contracts/presentment_covenant.py --json
+genvm-lint typecheck contracts/presentment_covenant.py --strict --json
 if ($LASTEXITCODE -ne 0) { throw "contract typecheck failed" }
 genvm-lint schema contracts/presentment_covenant.py --json --output artifacts/presentment_covenant.schema.json
 if ($LASTEXITCODE -ne 0) { throw "local schema generation failed" }

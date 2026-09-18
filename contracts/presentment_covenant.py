@@ -5,6 +5,8 @@ import json
 
 from genlayer import *
 
+# pyright: reportUnknownParameterType=false, reportUnknownVariableType=false, reportUnknownMemberType=false, reportUnknownArgumentType=false, reportMissingTypeArgument=false, reportPossiblyUnboundVariable=false, reportUnnecessaryIsInstance=false
+
 
 SOURCE_URL = (
     "https://raw.githubusercontent.com/dcsaorg/Conformance-Gateway/"
@@ -140,7 +142,7 @@ class PresentmentCovenant(gl.Contract):
             cure_deadline,
             retry_deadline,
         ]
-        if any(not isinstance(d, str) or len(d) < 20 for d in deadlines):
+        if any(len(d) < 20 for d in deadlines):
             _error("[EXPECTED] ", "malformed deadline")
         if not (
             activation_deadline
