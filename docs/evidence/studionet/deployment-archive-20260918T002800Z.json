@@ -15,7 +15,7 @@
       "attempt": {
         "attempt_nonce": 0,
         "last_reason": "",
-        "last_status": "",
+        "last_status": "PRESENTED",
         "retry_count": 0
       },
       "beneficiary_withdrawable_wei": 0,
@@ -23,17 +23,22 @@
         "applicant": "0x017D13fe11263159470130EC1F2f96879e8FD40c",
         "beneficiary": "0x45aD397c438397A702B53a7499a78D08961D39Db",
         "configured_purse_wei": 2000000000000000000,
-        "credit_id": "PC-20260918T002800Z",
+        "credit_id": "PC-20260917T235712Z",
         "issuer": "0xC495ef51618D03267A1f227aFe5b27B38c748272",
         "profile_digest": "0fbaa0ed09d9f003253d645bc1de5c130b2d6223f92d7396697d98580f7bab63",
         "profile_version": "pc-dcsa-synthetic-v1",
-        "state": "ACTIVE"
+        "state": "PRESENTED"
       },
       "discrepancies": [],
       "issuer_withdrawable_wei": 0,
       "presentation": {
-        "documents": [],
-        "presentation_id": ""
+        "invoice_bytes": "{\"amount_gen\":2,\"applicant\":\"0x017d13fe11263159470130ec1f2f96879e8fd40c\",\"beneficiary\":\"0x45aD397c438397A702B53a7499a78D08961D39Db\",\"credit_id\":\"PC-20260917T235712Z\",\"currency\":\"GEN\",\"goods_description\":\"Refined Soybean Oil\",\"invoice_id\":\"INV-PC-001\"}",
+        "invoice_digest": "9cadb011245c6976221e438d316f4380b93503b711e3b4f4e6cb8b6c2ec84098",
+        "invoice_id": "INV-PC-001",
+        "presentation_id": "PRES-001",
+        "source_digest": "2098535c024fafa973577ef2f3c5c7b9b60ec06d0413c08bf143bfb2d57fa7ed",
+        "source_url": "https://raw.githubusercontent.com/dcsaorg/Conformance-Gateway/1d0bf380123a849f6b15ad255055f4abcfb96f1a/ebl/src/main/resources/standards/ebl/messages/ebl-api-3.0.0-negotiable-bl.json",
+        "submitted_by": "0x45aD397c438397A702B53a7499a78D08961D39Db"
       }
     },
     "after_adjudication": {
@@ -57,7 +62,7 @@
         "applicant": "0x017D13fe11263159470130EC1F2f96879e8FD40c",
         "beneficiary": "0x45aD397c438397A702B53a7499a78D08961D39Db",
         "configured_purse_wei": 2000000000000000000,
-        "credit_id": "PC-20260918T002800Z",
+        "credit_id": "PC-20260917T235712Z",
         "issuer": "0xC495ef51618D03267A1f227aFe5b27B38c748272",
         "profile_digest": "0fbaa0ed09d9f003253d645bc1de5c130b2d6223f92d7396697d98580f7bab63",
         "profile_version": "pc-dcsa-synthetic-v1",
@@ -66,8 +71,8 @@
       "discrepancies": [],
       "issuer_withdrawable_wei": 0,
       "presentation": {
-        "invoice_bytes": "{\"amount_gen\":2,\"applicant\":\"0x017d13fe11263159470130ec1f2f96879e8fd40c\",\"beneficiary\":\"0x45aD397c438397A702B53a7499a78D08961D39Db\",\"credit_id\":\"PC-20260918T002800Z\",\"currency\":\"GEN\",\"goods_description\":\"Refined Soybean Oil\",\"invoice_id\":\"INV-PC-001\"}",
-        "invoice_digest": "d927f8171e2e3bffd836c10d1f0841f9147884a1997d4003409526dbcfb41c77",
+        "invoice_bytes": "{\"amount_gen\":2,\"applicant\":\"0x017d13fe11263159470130ec1f2f96879e8fd40c\",\"beneficiary\":\"0x45aD397c438397A702B53a7499a78D08961D39Db\",\"credit_id\":\"PC-20260917T235712Z\",\"currency\":\"GEN\",\"goods_description\":\"Refined Soybean Oil\",\"invoice_id\":\"INV-PC-001\"}",
+        "invoice_digest": "9cadb011245c6976221e438d316f4380b93503b711e3b4f4e6cb8b6c2ec84098",
         "invoice_id": "INV-PC-001",
         "presentation_id": "PRES-001",
         "source_digest": "2098535c024fafa973577ef2f3c5c7b9b60ec06d0413c08bf143bfb2d57fa7ed",
@@ -96,7 +101,7 @@
         "applicant": "0x017D13fe11263159470130EC1F2f96879e8FD40c",
         "beneficiary": "0x45aD397c438397A702B53a7499a78D08961D39Db",
         "configured_purse_wei": 2000000000000000000,
-        "credit_id": "PC-20260918T002800Z",
+        "credit_id": "PC-20260917T235712Z",
         "issuer": "0xC495ef51618D03267A1f227aFe5b27B38c748272",
         "profile_digest": "0fbaa0ed09d9f003253d645bc1de5c130b2d6223f92d7396697d98580f7bab63",
         "profile_version": "pc-dcsa-synthetic-v1",
@@ -105,8 +110,8 @@
       "discrepancies": [],
       "issuer_withdrawable_wei": 0,
       "presentation": {
-        "invoice_bytes": "{\"amount_gen\":2,\"applicant\":\"0x017d13fe11263159470130ec1f2f96879e8fd40c\",\"beneficiary\":\"0x45aD397c438397A702B53a7499a78D08961D39Db\",\"credit_id\":\"PC-20260918T002800Z\",\"currency\":\"GEN\",\"goods_description\":\"Refined Soybean Oil\",\"invoice_id\":\"INV-PC-001\"}",
-        "invoice_digest": "d927f8171e2e3bffd836c10d1f0841f9147884a1997d4003409526dbcfb41c77",
+        "invoice_bytes": "{\"amount_gen\":2,\"applicant\":\"0x017d13fe11263159470130ec1f2f96879e8fd40c\",\"beneficiary\":\"0x45aD397c438397A702B53a7499a78D08961D39Db\",\"credit_id\":\"PC-20260917T235712Z\",\"currency\":\"GEN\",\"goods_description\":\"Refined Soybean Oil\",\"invoice_id\":\"INV-PC-001\"}",
+        "invoice_digest": "9cadb011245c6976221e438d316f4380b93503b711e3b4f4e6cb8b6c2ec84098",
         "invoice_id": "INV-PC-001",
         "presentation_id": "PRES-001",
         "source_digest": "2098535c024fafa973577ef2f3c5c7b9b60ec06d0413c08bf143bfb2d57fa7ed",
@@ -322,7 +327,7 @@
         "applicant": "0x017D13fe11263159470130EC1F2f96879e8FD40c",
         "beneficiary": "0x45aD397c438397A702B53a7499a78D08961D39Db",
         "configured_purse_wei": 2000000000000000000,
-        "credit_id": "PC-20260918T002800Z",
+        "credit_id": "PC-20260917T235712Z",
         "issuer": "0xC495ef51618D03267A1f227aFe5b27B38c748272",
         "profile_digest": "0fbaa0ed09d9f003253d645bc1de5c130b2d6223f92d7396697d98580f7bab63",
         "profile_version": "pc-dcsa-synthetic-v1",
@@ -331,8 +336,8 @@
       "discrepancies": [],
       "issuer_withdrawable_wei": 0,
       "presentation": {
-        "invoice_bytes": "{\"amount_gen\":2,\"applicant\":\"0x017d13fe11263159470130ec1f2f96879e8fd40c\",\"beneficiary\":\"0x45aD397c438397A702B53a7499a78D08961D39Db\",\"credit_id\":\"PC-20260918T002800Z\",\"currency\":\"GEN\",\"goods_description\":\"Refined Soybean Oil\",\"invoice_id\":\"INV-PC-001\"}",
-        "invoice_digest": "d927f8171e2e3bffd836c10d1f0841f9147884a1997d4003409526dbcfb41c77",
+        "invoice_bytes": "{\"amount_gen\":2,\"applicant\":\"0x017d13fe11263159470130ec1f2f96879e8fd40c\",\"beneficiary\":\"0x45aD397c438397A702B53a7499a78D08961D39Db\",\"credit_id\":\"PC-20260917T235712Z\",\"currency\":\"GEN\",\"goods_description\":\"Refined Soybean Oil\",\"invoice_id\":\"INV-PC-001\"}",
+        "invoice_digest": "9cadb011245c6976221e438d316f4380b93503b711e3b4f4e6cb8b6c2ec84098",
         "invoice_id": "INV-PC-001",
         "presentation_id": "PRES-001",
         "source_digest": "2098535c024fafa973577ef2f3c5c7b9b60ec06d0413c08bf143bfb2d57fa7ed",
@@ -361,7 +366,7 @@
         "applicant": "0x017D13fe11263159470130EC1F2f96879e8FD40c",
         "beneficiary": "0x45aD397c438397A702B53a7499a78D08961D39Db",
         "configured_purse_wei": 2000000000000000000,
-        "credit_id": "PC-20260918T002800Z",
+        "credit_id": "PC-20260917T235712Z",
         "issuer": "0xC495ef51618D03267A1f227aFe5b27B38c748272",
         "profile_digest": "0fbaa0ed09d9f003253d645bc1de5c130b2d6223f92d7396697d98580f7bab63",
         "profile_version": "pc-dcsa-synthetic-v1",
@@ -370,8 +375,8 @@
       "discrepancies": [],
       "issuer_withdrawable_wei": 0,
       "presentation": {
-        "invoice_bytes": "{\"amount_gen\":2,\"applicant\":\"0x017d13fe11263159470130ec1f2f96879e8fd40c\",\"beneficiary\":\"0x45aD397c438397A702B53a7499a78D08961D39Db\",\"credit_id\":\"PC-20260918T002800Z\",\"currency\":\"GEN\",\"goods_description\":\"Refined Soybean Oil\",\"invoice_id\":\"INV-PC-001\"}",
-        "invoice_digest": "d927f8171e2e3bffd836c10d1f0841f9147884a1997d4003409526dbcfb41c77",
+        "invoice_bytes": "{\"amount_gen\":2,\"applicant\":\"0x017d13fe11263159470130ec1f2f96879e8fd40c\",\"beneficiary\":\"0x45aD397c438397A702B53a7499a78D08961D39Db\",\"credit_id\":\"PC-20260917T235712Z\",\"currency\":\"GEN\",\"goods_description\":\"Refined Soybean Oil\",\"invoice_id\":\"INV-PC-001\"}",
+        "invoice_digest": "9cadb011245c6976221e438d316f4380b93503b711e3b4f4e6cb8b6c2ec84098",
         "invoice_id": "INV-PC-001",
         "presentation_id": "PRES-001",
         "source_digest": "2098535c024fafa973577ef2f3c5c7b9b60ec06d0413c08bf143bfb2d57fa7ed",
@@ -400,7 +405,7 @@
         "applicant": "0x017D13fe11263159470130EC1F2f96879e8FD40c",
         "beneficiary": "0x45aD397c438397A702B53a7499a78D08961D39Db",
         "configured_purse_wei": 2000000000000000000,
-        "credit_id": "PC-20260918T002800Z",
+        "credit_id": "PC-20260917T235712Z",
         "issuer": "0xC495ef51618D03267A1f227aFe5b27B38c748272",
         "profile_digest": "0fbaa0ed09d9f003253d645bc1de5c130b2d6223f92d7396697d98580f7bab63",
         "profile_version": "pc-dcsa-synthetic-v1",
@@ -414,22 +419,24 @@
       }
     }
   },
+  "canonical_read_notes": {
+    "after_activation": "Refreshed during resumable recovery after the later presentation had finalized; use the finalized transaction ordering plus after_presentation/after_adjudication reads for the lifecycle boundary."
+  },
   "chain_id": 61999,
-  "contract_address": "0x2D9a2942f1700280e633E08d62528896332C480d",
-  "contract_explorer": "https://genlayer-explorer.vercel.app/address/0x2D9a2942f1700280e633E08d62528896332C480d",
-  "credit_id": "PC-20260918T002800Z",
+  "contract_address": "0x77BBd0FaF7600bD1dD23087B6D6E76D332683CB2",
+  "contract_explorer": "https://genlayer-explorer.vercel.app/address/0x77BBd0FaF7600bD1dD23087B6D6E76D332683CB2",
+  "credit_id": "PC-20260917T235712Z",
   "depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
   "deployment": {
-    "additional_execution_results": [
-      "ERROR"
+    "contract_address": "0x77BBd0FaF7600bD1dD23087B6D6E76D332683CB2",
+    "execution_results": [
+      "SUCCESS"
     ],
-    "contract_address": "0x2D9a2942f1700280e633E08d62528896332C480d",
-    "finalized_at_utc": "2026-09-18T00:28:43.335817+00:00",
-    "leader_execution_result": "SUCCESS",
+    "finalized_at_utc": "2026-09-17T23:57:56.039589+00:00",
     "operation": "deploy",
     "result": "MAJORITY_AGREE",
     "status": "FINALIZED",
-    "transaction_hash": "0x8c31ced9db9a29429ccd4a80e8d704faae85b88c5bf8a11920ec0f56aa892757",
+    "transaction_hash": "0x09c3e33a00090d0725915fc5a83ff110068a810dbf8a85482c1ee400a0797ce8",
     "vote_counts": {
       "agree": 3,
       "idle": 2
@@ -441,24 +448,22 @@
   "portal_submit_performed": false,
   "purse_wei": 2000000000000000000,
   "rpc": "https://studio.genlayer.com/api",
-  "source_commit": "0a1cb6f02a89f535a3b054b6dc62ad66782c2462",
-  "source_sha256": "b70da85e09f980a3bd4d994a2228b7b9193ae8edd9656c56176e7f5aa90ba3fc",
+  "source_commit": "25911bf991c2a372df74de49c8daccf180815bff",
+  "source_sha256": "062765ccfa5fddaed8b800314ace6298f483764970fb6247420299721ffd7b56",
   "status": "LIFECYCLE_SUCCESS",
   "transactions": {
     "activate_credit": {
-      "additional_execution_results": [
+      "contract_address": null,
+      "execution_results": [
         "SUCCESS"
       ],
-      "contract_address": null,
-      "finalized_at_utc": "2026-09-18T00:29:39.465109+00:00",
-      "leader_execution_result": "SUCCESS",
+      "finalized_at_utc": "2026-09-17T23:58:50.503875+00:00",
       "operation": "activate_credit",
       "result": "MAJORITY_AGREE",
       "status": "FINALIZED",
-      "transaction_hash": "0xeed92419b9155520eb5421d506214d82148f9a6759f274d1dbd6bf762e9228f3",
+      "transaction_hash": "0x19cf047505d5b42acad69e7398f1b0a9d6cec06ef9b249ac0bed919fac67791a",
       "vote_counts": {
-        "agree": 3,
-        "idle": 2
+        "agree": 5
       }
     },
     "adjudicate": {
@@ -466,16 +471,15 @@
         "SUCCESS"
       ],
       "contract_address": null,
-      "finalized_at_utc": "2026-09-18T00:32:20.956078+00:00",
+      "finalized_at_utc": "2026-09-18T00:03:25.842384+00:00",
       "leader_execution_result": "SUCCESS",
       "operation": "adjudicate",
       "result": "MAJORITY_AGREE",
       "status": "FINALIZED",
-      "transaction_hash": "0xce6a9a2fdaa0e1e81963c1a473aab14a0fe70aa70e27d542b8d14387208ed604",
+      "transaction_hash": "0x7e41e6fd9c726e846203e45f167ab776dc813fcb5082d1960156f69341849d83",
       "vote_counts": {
         "agree": 3,
-        "disagree": 1,
-        "idle": 1
+        "idle": 2
       }
     },
     "close_credit": {
@@ -483,12 +487,12 @@
         "SUCCESS"
       ],
       "contract_address": null,
-      "finalized_at_utc": "2026-09-18T00:34:05.929860+00:00",
+      "finalized_at_utc": "2026-09-18T00:05:10.222580+00:00",
       "leader_execution_result": "SUCCESS",
       "operation": "close_credit",
       "result": "MAJORITY_AGREE",
       "status": "FINALIZED",
-      "transaction_hash": "0xd7773fdc1fa37b3d692c9150bc7b80ed744ff7c1155607bb92babdd64e8968d4",
+      "transaction_hash": "0x0b67e29a100bb96372d7f0e30d7c95458c018430d023dac4c6b538a1f1f36bcc",
       "vote_counts": {
         "agree": 3,
         "idle": 2
@@ -496,15 +500,15 @@
     },
     "submit_presentation": {
       "additional_execution_results": [
-        "SUCCESS"
+        "ERROR"
       ],
       "contract_address": null,
-      "finalized_at_utc": "2026-09-18T00:30:31.773607+00:00",
+      "finalized_at_utc": "2026-09-18T00:02:28.241347+00:00",
       "leader_execution_result": "SUCCESS",
       "operation": "submit_presentation",
       "result": "MAJORITY_AGREE",
       "status": "FINALIZED",
-      "transaction_hash": "0x52861fe7a658acd8f2fb4f5ea2f447fe4559aeea093ecb432c51b3d0e1e510d6",
+      "transaction_hash": "0x8bf7ae1066eff3461a9c844e97e66d3a333b272177ae244f8fbaacc1c86fb33a",
       "vote_counts": {
         "agree": 3,
         "idle": 2
@@ -512,15 +516,15 @@
     },
     "withdraw": {
       "additional_execution_results": [
-        "ERROR"
+        "SUCCESS"
       ],
       "contract_address": null,
-      "finalized_at_utc": "2026-09-18T00:33:13.068817+00:00",
+      "finalized_at_utc": "2026-09-18T00:04:18.417808+00:00",
       "leader_execution_result": "SUCCESS",
       "operation": "withdraw",
       "result": "MAJORITY_AGREE",
       "status": "FINALIZED",
-      "transaction_hash": "0xf2befd8d2ad65b469de3140133f9c289f57666a6ea522bdb9e6a01edc2d217cd",
+      "transaction_hash": "0x723fbfbdd2352318b5d48fb0775dbb46be2107d7dcf59073d7612cda1ab6688a",
       "vote_counts": {
         "agree": 3,
         "idle": 2

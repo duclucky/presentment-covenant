@@ -4,7 +4,7 @@
     "chain_id":  61999,
     "rpc":  "https://studio.genlayer.com/api",
     "explorer":  "https://genlayer-explorer.vercel.app",
-    "checked_at_utc":  "2026-09-18T00:27:15.3562178Z",
+    "checked_at_utc":  "2026-09-18T00:39:05.0813596Z",
     "runner_version":  "v0.2.16",
     "depends_hash":  "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
     "source_sha256":  "b70da85e09f980a3bd4d994a2228b7b9193ae8edd9656c56176e7f5aa90ba3fc",

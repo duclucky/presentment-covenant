@@ -1,18 +1,54 @@
 {
   "kind": "final_canonical_verification",
-  "verified_at_utc": "2026-09-18T00:14:35.9417491Z",
+  "verified_at_utc": "2026-09-18T00:40:39.038758+00:00",
   "network": "studionet",
   "chain_id": 61999,
-  "source_commit": "25911bf991c2a372df74de49c8daccf180815bff",
-  "contract_address": "0x77BBd0FaF7600bD1dD23087B6D6E76D332683CB2",
+  "source_commit": "0a1cb6f02a89f535a3b054b6dc62ad66782c2462",
+  "contract_address": "0x2D9a2942f1700280e633E08d62528896332C480d",
   "transaction_status": {
-    "activate_credit": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"},
-    "submit_presentation": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"},
-    "adjudicate": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"},
-    "withdraw": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"},
-    "close_credit": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"}
+    "activate_credit": {
+      "status": "FINALIZED",
+      "result": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "additional_execution_results": [
+        "SUCCESS"
+      ]
+    },
+    "adjudicate": {
+      "status": "FINALIZED",
+      "result": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "additional_execution_results": [
+        "SUCCESS"
+      ]
+    },
+    "close_credit": {
+      "status": "FINALIZED",
+      "result": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "additional_execution_results": [
+        "SUCCESS"
+      ]
+    },
+    "submit_presentation": {
+      "status": "FINALIZED",
+      "result": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "additional_execution_results": [
+        "SUCCESS"
+      ]
+    },
+    "withdraw": {
+      "status": "FINALIZED",
+      "result": "MAJORITY_AGREE",
+      "leader_execution": "SUCCESS",
+      "additional_execution_results": [
+        "ERROR"
+      ]
+    }
   },
   "canonical_reads": {
+    "credit_id": "PC-20260918T002800Z",
     "credit_state": "CLOSED",
     "adjudication_status": "COMPLIANT",
     "beneficiary_credit_wei": 0,
@@ -27,7 +63,7 @@
     "beneficiary_withdrawable_wei": 0
   },
   "interpretation": {
-    "finalized_execution": "All listed writes finalized with successful canonical leader execution.",
+    "finalized_execution": "All listed writes finalized with successful canonical leader execution; withdraw also exposed one additional ERROR result, retained as a distinct execution result.",
     "semantic_result": "COMPLIANT",
     "canonical_consequence": "The locked 2 GEN purse was credited, withdrawn once by the beneficiary, and the contract closed at zero liability."
   },
