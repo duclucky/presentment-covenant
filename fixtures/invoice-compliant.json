@@ -1,0 +1,9 @@
+{
+  "invoice_id": "INV-PC-001",
+  "credit_id": "PC-DEMO-001",
+  "beneficiary": "BENEFICIARY_PLACEHOLDER",
+  "applicant": "APPLICANT_PLACEHOLDER",
+  "amount_gen": 2,
+  "currency": "GEN",
+  "goods_description": "Refined Soybean Oil"
+}

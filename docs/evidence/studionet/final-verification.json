@@ -1,0 +1,34 @@
+{
+  "kind": "final_canonical_verification",
+  "verified_at_utc": "2026-09-18T00:14:35.9417491Z",
+  "network": "studionet",
+  "chain_id": 61999,
+  "contract_address": "0x77BBd0FaF7600bD1dD23087B6D6E76D332683CB2",
+  "transaction_status": {
+    "activate_credit": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"},
+    "submit_presentation": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"},
+    "adjudicate": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"},
+    "withdraw": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"},
+    "close_credit": {"status": "FINALIZED", "result": "MAJORITY_AGREE", "leader_execution": "SUCCESS"}
+  },
+  "canonical_reads": {
+    "credit_state": "CLOSED",
+    "adjudication_status": "COMPLIANT",
+    "beneficiary_credit_wei": 0,
+    "issuer_refund_credit_wei": 0,
+    "locked_purse_wei": 0,
+    "total_withdrawn_wei": 2000000000000000000,
+    "liability_wei": 0,
+    "zero_liability": true,
+    "attempt_nonce": 1,
+    "retry_count": 0,
+    "discrepancies": [],
+    "beneficiary_withdrawable_wei": 0
+  },
+  "interpretation": {
+    "finalized_execution": "All listed writes finalized with successful canonical leader execution.",
+    "semantic_result": "COMPLIANT",
+    "canonical_consequence": "The locked 2 GEN purse was credited, withdrawn once by the beneficiary, and the contract closed at zero liability."
+  },
+  "portal_submit_performed": false
+}

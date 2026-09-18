@@ -1,0 +1,9 @@
+.env
+.env.*
+!.env.example
+artifacts/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+docs/evidence/studionet/*.raw
+docs/evidence/studionet/secret*

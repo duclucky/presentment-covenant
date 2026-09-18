@@ -1,0 +1,26 @@
+﻿{
+    "kind":  "target_network_preflight",
+    "network":  "studionet",
+    "chain_id":  61999,
+    "rpc":  "https://studio.genlayer.com/api",
+    "explorer":  "https://genlayer-explorer.vercel.app",
+    "checked_at_utc":  "2026-09-17T23:54:19.6485990Z",
+    "runner_version":  "v0.2.16",
+    "depends_hash":  "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6",
+    "source_sha256":  "062765ccfa5fddaed8b800314ace6298f483764970fb6247420299721ffd7b56",
+    "local_schema_sha256":  "fda7ec3ec0d9e8b2fccfa4608ca016081fde87b353e96588738b77d01622ea72",
+    "target_schema_sha256":  "f95281b14b2ffbfd0886b42f9850d2d25533da9897df5cf1d0e391060ac0374b",
+    "schema_match":  true,
+    "constructor_abi":  "9 string parameters; role strings are converted to validated native Address values inside the contract",
+    "write_methods_checked":  [
+                                  "activate_credit",
+                                  "submit_presentation",
+                                  "adjudicate",
+                                  "waive_discrepancies",
+                                  "retry_unverifiable",
+                                  "expire_credit",
+                                  "withdraw",
+                                  "close_credit"
+                              ],
+    "status":  "READ_ONLY_PREFLIGHT_PASSED"
+}

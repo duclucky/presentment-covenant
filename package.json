@@ -1,0 +1,12 @@
+{
+  "name": "presentment-covenant",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Documentary presentment covenant intelligent contract",
+  "scripts": {
+    "check": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check.ps1",
+    "test:direct": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PYTHONUTF8='1'; pytest tests/direct/ -q\"",
+    "lint:contract": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PYTHONUTF8='1'; $env:GENVM_VERSION='v0.2.16'; genvm-lint check contracts/presentment_covenant.py --json\"",
+    "schema": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PYTHONUTF8='1'; $env:GENVM_VERSION='v0.2.16'; New-Item -ItemType Directory -Force artifacts | Out-Null; genvm-lint schema contracts/presentment_covenant.py --json --output artifacts/presentment_covenant.schema.json\""
+  }
+}

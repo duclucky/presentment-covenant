@@ -1,0 +1,9 @@
+networks:
+  default: localnet
+  localnet: null
+  studionet: {}
+  testnet_bradbury: {}
+paths:
+  contracts: contracts
+  artifacts: artifacts
+environment: .env
