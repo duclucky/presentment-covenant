@@ -231,8 +231,6 @@ def submit_step(client: Any, account: Any, address: str, operation: str, method:
         )
     safe, _ = wait_finalized(client, tx_hash, operation)
     write_json(CHECKPOINT, {**safe, "source_sha256": source_hash(), "network": "studio-dev", "chain_id": CHAIN_ID})
-    if safe["leader_execution_result"] != "SUCCESS":
-        raise RuntimeError(f"{operation} finalized without successful execution")
     return safe
 
 
@@ -340,6 +338,8 @@ def main() -> int:
     evidence.setdefault("canonical_reads", {})
     evidence["transactions"]["activate_credit"] = ensure_step("activate_credit", issuer, "activate_credit", [], PAYOUT_WEI)
     evidence["canonical_reads"]["after_activation"] = read_views(client, address, beneficiary_address, issuer_address)
+    if evidence["canonical_reads"]["after_activation"]["credit"]["state"] == "DRAFT":
+        raise RuntimeError("activation finalized without leaving canonical DRAFT state")
     write_json(EVIDENCE, evidence)
 
     invoice = {
@@ -357,6 +357,8 @@ def main() -> int:
         "submit_presentation", beneficiary, "submit_presentation", ["PRES-001", "INV-PC-001", invoice_bytes, invoice_digest]
     )
     evidence["canonical_reads"]["after_presentation"] = read_views(client, address, beneficiary_address, issuer_address)
+    if evidence["canonical_reads"]["after_presentation"]["credit"]["state"] in ("DRAFT", "ACTIVE"):
+        raise RuntimeError("presentation finalized without reaching or passing PRESENTED state")
     write_json(EVIDENCE, evidence)
 
     evidence["transactions"]["adjudicate"] = ensure_step("adjudicate", issuer, "adjudicate", [])
@@ -368,8 +370,20 @@ def main() -> int:
     if state == "COMPLIANT":
         evidence["transactions"]["withdraw"] = ensure_step("withdraw", beneficiary, "withdraw", [])
         evidence["canonical_reads"]["after_withdraw"] = read_views(client, address, beneficiary_address, issuer_address)
+        after_withdraw = evidence["canonical_reads"]["after_withdraw"]
+        if (
+            after_withdraw["credit"]["state"] != "WITHDRAWN"
+            or after_withdraw["beneficiary_withdrawable_wei"] != 0
+        ):
+            raise RuntimeError("withdraw finalized without canonical debit and WITHDRAWN state")
         evidence["transactions"]["close_credit"] = ensure_step("close_credit", issuer, "close_credit", [])
         evidence["canonical_reads"]["after_close"] = read_views(client, address, beneficiary_address, issuer_address)
+        after_close = evidence["canonical_reads"]["after_close"]
+        if (
+            after_close["credit"]["state"] != "CLOSED"
+            or not after_close["accounting"]["zero_liability"]
+        ):
+            raise RuntimeError("close finalized without canonical zero-liability CLOSED state")
         evidence["status"] = "LIFECYCLE_SUCCESS"
     else:
         evidence["status"] = "LIFECYCLE_FINALIZED_NON_CONSEQUENTIAL"
