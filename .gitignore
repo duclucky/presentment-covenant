@@ -1,6 +1,9 @@
 .env
 .env.*
 !.env.example
+.venv/
+.gltest_cache/
+.gltest-artifacts/
 artifacts/
 .pytest_cache/
 __pycache__/

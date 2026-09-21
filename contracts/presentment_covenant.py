@@ -1,9 +1,10 @@
-# { "Depends": "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6" }
+# { "Depends": "py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng" }
 
 import hashlib
 import json
 
-from genlayer import *
+import genlayer as gl
+from genlayer.types import Address, u256
 
 # pyright: reportUnknownParameterType=false, reportUnknownVariableType=false, reportUnknownMemberType=false, reportUnknownArgumentType=false, reportMissingTypeArgument=false, reportPossiblyUnboundVariable=false, reportUnnecessaryIsInstance=false
 
@@ -27,21 +28,12 @@ ALLOWED_CODES = (
 )
 
 
-@gl.evm.contract_interface
-class _Recipient:
-    class View:
-        pass
-
-    class Write:
-        pass
-
-
 def _error(prefix: str, message: str) -> None:
     raise gl.vm.UserError(prefix + message)
 
 
 def _now() -> str:
-    return str(gl.message_raw["datetime"])
+    return str(gl.message.raw["datetime"])
 
 
 def _sha256(value: bytes) -> str:
@@ -87,7 +79,7 @@ def _normalize_verdict(value: object) -> dict:
     }
 
 
-class PresentmentCovenant(gl.Contract):
+class PresentmentCovenant(gl.contract.Contract):
     issuer: Address
     applicant: Address
     beneficiary: Address
@@ -112,9 +104,9 @@ class PresentmentCovenant(gl.Contract):
     retry_count: u256
     last_status: str
     last_reason: str
-    presentations: TreeMap[str, str]
-    discrepancies: DynArray[str]
-    withdrawal_credits: TreeMap[Address, u256]
+    presentations: gl.storage.TreeMap[str, str]
+    discrepancies: gl.storage.DynArray[str]
+    withdrawal_credits: gl.storage.TreeMap[Address, u256]
 
     def __init__(
         self,
@@ -147,12 +139,15 @@ class PresentmentCovenant(gl.Contract):
         if not (
             activation_deadline
             < presentation_deadline
-            < adjudication_deadline
-            <= waiver_deadline
+            < waiver_deadline
             <= cure_deadline
             <= retry_deadline
+            < adjudication_deadline
         ):
-            _error("[EXPECTED] ", "deadlines must be ordered")
+            _error(
+                "[EXPECTED] ",
+                "deadlines must end with adjudication after cure and retry",
+            )
         self.issuer = gl.message.sender_address
         self.applicant = applicant_addr
         self.beneficiary = beneficiary_addr
@@ -165,16 +160,16 @@ class PresentmentCovenant(gl.Contract):
         self.retry_deadline = retry_deadline
         self.state = "DRAFT"
         self.configured_purse = PURSE_WEI
-        self.locked_purse = u256(0)
-        self.beneficiary_credit = u256(0)
-        self.issuer_refund_credit = u256(0)
-        self.total_withdrawn = u256(0)
+        self.locked_purse = 0
+        self.beneficiary_credit = 0
+        self.issuer_refund_credit = 0
+        self.total_withdrawn = 0
         self.presentation_id = ""
         self.invoice_id = ""
         self.invoice_digest = ""
         self.source_digest_seen = ""
-        self.attempt_nonce = u256(0)
-        self.retry_count = u256(0)
+        self.attempt_nonce = 0
+        self.retry_count = 0
         self.last_status = ""
         self.last_reason = ""
 
@@ -259,20 +254,20 @@ class PresentmentCovenant(gl.Contract):
             "zero_liability": self.locked_purse
             + self.beneficiary_credit
             + self.issuer_refund_credit
-            == u256(0),
+            == 0,
         }
 
     @gl.public.view
     def get_withdrawable(self, account: str) -> u256:
-        return self.withdrawal_credits.get(Address(account), u256(0))
+        return self.withdrawal_credits.get(Address(account), 0)
 
     @gl.public.view
     def is_closable(self) -> bool:
         return (
             self.state in ("WITHDRAWN", "REFUNDED")
-            and self.locked_purse == u256(0)
-            and self.beneficiary_credit == u256(0)
-            and self.issuer_refund_credit == u256(0)
+            and self.locked_purse == 0
+            and self.beneficiary_credit == 0
+            and self.issuer_refund_credit == 0
         )
 
     @gl.public.write.payable
@@ -455,7 +450,7 @@ class PresentmentCovenant(gl.Contract):
             )
 
         try:
-            result = gl.vm.run_nondet_unsafe(examine, validator_fn)
+            result = gl.vm.run_nondet(examine, validator_fn)
             normalized = _normalize_verdict(result)
         except Exception:
             self.retry_count = self.retry_count + 1
@@ -476,7 +471,7 @@ class PresentmentCovenant(gl.Contract):
         if normalized["status"] == "COMPLIANT":
             self.beneficiary_credit = self.locked_purse
             self.withdrawal_credits[self.beneficiary] = self.beneficiary_credit
-            self.locked_purse = u256(0)
+            self.locked_purse = 0
             self.state = "COMPLIANT"
         elif normalized["status"] == "DISCREPANT":
             self.state = "DISCREPANT_OPEN"
@@ -494,7 +489,7 @@ class PresentmentCovenant(gl.Contract):
             _error("[EXPECTED] ", "waiver deadline passed")
         self.beneficiary_credit = self.locked_purse
         self.withdrawal_credits[self.beneficiary] = self.beneficiary_credit
-        self.locked_purse = u256(0)
+        self.locked_purse = 0
         self.state = "COMPLIANT"
         self.last_status = "COMPLIANT_WAIVED"
 
@@ -519,31 +514,31 @@ class PresentmentCovenant(gl.Contract):
             "UNVERIFIABLE_OPEN",
         ):
             _error("[EXPECTED] ", "credit cannot expire in this state")
-        if _now() < self.retry_deadline:
+        if _now() < self.adjudication_deadline:
             _error("[EXPECTED] ", "credit is not expired")
         self.issuer_refund_credit = self.locked_purse
         self.withdrawal_credits[self.issuer] = self.issuer_refund_credit
-        self.locked_purse = u256(0)
+        self.locked_purse = 0
         self.state = "REFUNDABLE"
         self.last_status = "EXPIRED"
 
     @gl.public.write
     def withdraw(self) -> None:
         sender = gl.message.sender_address
-        amount = self.withdrawal_credits.get(sender, u256(0))
-        if amount == u256(0):
+        amount = self.withdrawal_credits.get(sender, 0)
+        if amount == 0:
             _error("[EXPECTED] ", "no withdrawal credit")
-        self.withdrawal_credits[sender] = u256(0)
+        self.withdrawal_credits[sender] = 0
         if sender == self.beneficiary and self.state == "COMPLIANT":
-            self.beneficiary_credit = u256(0)
+            self.beneficiary_credit = 0
             self.state = "WITHDRAWN"
         elif sender == self.issuer and self.state == "REFUNDABLE":
-            self.issuer_refund_credit = u256(0)
+            self.issuer_refund_credit = 0
             self.state = "REFUNDED"
         else:
             _error("[EXPECTED] ", "withdrawal state mismatch")
         self.total_withdrawn = self.total_withdrawn + amount
-        _Recipient(sender).emit_transfer(value=amount)
+        gl.contract.get_at(sender).emit_transfer(amount)
 
     @gl.public.write
     def close_credit(self) -> None:

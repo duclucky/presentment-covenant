@@ -12,7 +12,7 @@ The contract hardcodes the reviewed DCSA URL, its SHA-256 digest, profile versio
 
 `DRAFT -> ACTIVE -> PRESENTED -> REVIEWING -> COMPLIANT | DISCREPANT_OPEN | UNVERIFIABLE_OPEN`.
 
-`DISCREPANT_OPEN -> COMPLIANT` through applicant waiver or a fresh valid presentation before cure deadline. `UNVERIFIABLE_OPEN -> PRESENTED` through a bounded retry. `ACTIVE | PRESENTED | DISCREPANT_OPEN | UNVERIFIABLE_OPEN -> REFUNDABLE` at or after final deadline. `COMPLIANT -> WITHDRAWN`, `REFUNDABLE -> REFUNDED`, then either terminal state -> `CLOSED` only after all balances are zero.
+`DISCREPANT_OPEN -> COMPLIANT` through applicant waiver or `DISCREPANT_OPEN -> PRESENTED` through a fresh valid presentation before the cure deadline. `UNVERIFIABLE_OPEN -> PRESENTED` through a bounded retry before the retry deadline. The constructor enforces `activation < presentation < waiver <= cure <= retry < adjudication`, so every accepted cure or retry has a non-empty adjudication interval. `ACTIVE | PRESENTED | DISCREPANT_OPEN | UNVERIFIABLE_OPEN -> REFUNDABLE` only at or after the final adjudication deadline. `COMPLIANT -> WITHDRAWN`, `REFUNDABLE -> REFUNDED`, then either terminal state -> `CLOSED` only after all balances are zero.
 
 ## Evidence and semantic output
 
@@ -22,7 +22,7 @@ The LLM receives source JSON and invoice JSON inside explicit data delimiters an
 
 ## Time policy
 
-Every time-bounded write checks `gl.message_raw["datetime"]` directly. Equality at a deadline is late for activation, presentation, adjudication, waiver, cure, retry, and withdrawal does not use a deadline. Expiry is eligible at equality (`now >= final_deadline`). Tests cover boundary minus one, equality, and plus one with a stale phase.
+Every time-bounded write checks `gl.message.raw["datetime"]` directly. Equality at a deadline is late for activation, presentation, adjudication, waiver, cure, and retry; withdrawal does not use a deadline. The adjudication deadline is the final deadline, and expiry is eligible at equality (`now >= adjudication_deadline`). Regression tests prove cures accepted just before `cure_deadline` and retries accepted just before `retry_deadline` can still be adjudicated afterward.
 
 ## Value policy
 

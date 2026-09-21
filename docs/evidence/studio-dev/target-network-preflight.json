@@ -1,0 +1,26 @@
+﻿{
+    "kind":  "target_network_preflight",
+    "network":  "studio-dev",
+    "chain_id":  61997,
+    "rpc":  "https://studio-dev.genlayer.com/api",
+    "explorer":  "https://explorer-studio-dev.genlayer.com",
+    "checked_at_utc":  "2026-09-21T10:30:56.3944935Z",
+    "runner_version":  "v0.6.0-rc5",
+    "depends_hash":  "py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng",
+    "source_sha256":  "d846ee1637c5986aedab342d1438144ad663b1766e646a2ffc1bde8bf807a1a2",
+    "local_schema_sha256":  "fda7ec3ec0d9e8b2fccfa4608ca016081fde87b353e96588738b77d01622ea72",
+    "target_schema_sha256":  "f95281b14b2ffbfd0886b42f9850d2d25533da9897df5cf1d0e391060ac0374b",
+    "schema_match":  true,
+    "constructor_abi":  "9 string parameters; role strings are converted to validated native Address values inside the contract",
+    "write_methods_checked":  [
+                                  "activate_credit",
+                                  "submit_presentation",
+                                  "adjudicate",
+                                  "waive_discrepancies",
+                                  "retry_unverifiable",
+                                  "expire_credit",
+                                  "withdraw",
+                                  "close_credit"
+                              ],
+    "status":  "READ_ONLY_PREFLIGHT_PASSED"
+}

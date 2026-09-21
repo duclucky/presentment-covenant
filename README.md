@@ -16,13 +16,13 @@ pytest tests/direct/ -v
 npm run check
 ```
 
-The contract has 18 public methods (10 views and 8 writes), and the direct suite contains 10 tests. `npm run check` runs the pinned-runner lint, schema emission, and all direct adversarial tests. This is the Intelligent Contracts track, so there is deliberately no frontend or frontend build.
+The contract has 18 public methods (10 views and 8 writes), and the direct suite contains 12 tests. `npm run check` runs the pinned-runner lint, strict typecheck, schema emission, and all direct adversarial tests. The deadline regression tests prove that cures and retries accepted in their respective windows remain adjudicable because `adjudication_deadline` is strictly last. This is the Intelligent Contracts track, so there is deliberately no frontend or frontend build.
 
-## Verified Studionet run
+## Studio Dev revision
 
-The target network is Studionet (chain 61999). The read-only target schema preflight matched the local schema before deployment. The resumable lifecycle finalized these writes with `MAJORITY_AGREE` and successful canonical leader execution: deployment (`0x8c31ced9db9a29429ccd4a80e8d704faae85b88c5bf8a11920ec0f56aa892757`), activation (`0xeed92419b9155520eb5421d506214d82148f9a6759f274d1dbd6bf762e9228f3`), presentation (`0x52861fe7a658acd8f2fb4f5ea2f447fe4559aeea093ecb432c51b3d0e1e510d6`), adjudication (`0xce6a9a2fdaa0e1e81963c1a473aab14a0fe70aa70e27d542b8d14387208ed604`), beneficiary withdrawal (`0xf2befd8d2ad65b469de3140133f9c289f57666a6ea522bdb9e6a01edc2d217cd`), and closure (`0xd7773fdc1fa37b3d692c9150bc7b80ed744ff7c1155607bb92babdd64e8968d4`). The current Studionet Explorer contract page is [`0x2D9a2942f1700280e633E08d62528896332C480d`](https://explorer-studio.genlayer.com/contracts/0x2D9a2942f1700280e633E08d62528896332C480d). Canonical reads ended in `CLOSED`, `total_withdrawn = 2 GEN`, and `zero_liability = true`; adjudication reached `COMPLIANT` before withdrawal.
+The active target is Studio Dev (chain 61997) with the Consensus v0.6 RC-compatible contract API and fee profile. The read-only target schema preflight matches the local schema. Live deployment evidence is intentionally added only after the corrected source is committed and the finalized Studio Dev state has been read back.
 
-Sanitized, allowlisted receipts and canonical reads are in [`docs/evidence/studionet/deployment.json`](docs/evidence/studionet/deployment.json); the fresh final state check is [`docs/evidence/studionet/final-verification.json`](docs/evidence/studionet/final-verification.json), and the preflight record is [`docs/evidence/studionet/target-network-preflight.json`](docs/evidence/studionet/target-network-preflight.json). Local/direct evidence remains distinct from finalized network evidence.
+The current preflight record is [`docs/evidence/studio-dev/target-network-preflight.json`](docs/evidence/studio-dev/target-network-preflight.json). Files under `docs/evidence/studionet/` are retained only as historical evidence for the superseded legacy revision and must not be mixed with Studio Dev claims.
 
 ## Reuse
 

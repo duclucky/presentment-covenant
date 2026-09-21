@@ -1,9 +1,8 @@
 networks:
   default: localnet
   localnet: null
-  studionet: {}
-  testnet_bradbury: {}
+  studio_devnet: {}
 paths:
   contracts: contracts
-  artifacts: artifacts
+  artifacts: .gltest-artifacts
 environment: .env

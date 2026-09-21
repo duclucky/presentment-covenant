@@ -12,17 +12,17 @@ PresentmentCovenant is a contract-only GenLayer primitive for a bounded document
 
 - Primary contract: `contracts/presentment_covenant.py`
 - Public methods: **18** (**10** views, **8** writes)
-- Direct tests: **10**
+- Direct tests: **12**
 - Aggregate local check: `npm run check` (lint, schema emission, direct tests)
 
 ## Links and evidence
 
 - Repository: https://github.com/duclucky/presentment-covenant
-- Primary contract Explorer: https://explorer-studio.genlayer.com/contracts/0x2D9a2942f1700280e633E08d62528896332C480d
-- Deployment source commit: `0a1cb6f02a89f535a3b054b6dc62ad66782c2462` (contract source SHA-256 is recorded in the lifecycle evidence)
-- Sanitized lifecycle evidence: `docs/evidence/studionet/deployment.json`
-- Fresh canonical state verification: `docs/evidence/studionet/final-verification.json`
-- Target schema preflight: `docs/evidence/studionet/target-network-preflight.json`
+- Primary contract Explorer: **pending corrected Studio Dev deployment**
+- Deployment source commit: **pending corrected source commit**
+- Sanitized lifecycle evidence: `docs/evidence/studio-dev/deployment.json` (created only after finalization)
+- Fresh canonical state verification: `docs/evidence/studio-dev/final-verification.json` (created only after finalization)
+- Target schema preflight: `docs/evidence/studio-dev/target-network-preflight.json`
 - CI link: **not configured**; local `npm run check` passed.
 
 ## What validators inspect
@@ -31,7 +31,7 @@ The leader and independent validator fetch only the frozen DCSA URL, recompute t
 
 ## Finalized consequence
 
-The recorded Studionet run finalized deployment, activation, presentation, adjudication (`COMPLIANT`), beneficiary withdrawal of exactly 2 GEN, and closure. Final canonical state is `CLOSED`, `total_withdrawn = 2 GEN`, and `zero_liability = true`.
+No corrected Studio Dev consequence is claimed until the matching deployment and canonical reads finalize. The legacy Studionet run is historical and is not evidence for this corrected source.
 
 ## Reuse value
 

@@ -1,4 +1,4 @@
-"""Resumable, sanitized Studionet deployment and bounded lifecycle demo.
+"""Resumable, sanitized Studio Dev deployment and bounded lifecycle demo.
 
 This script never prints or stores private keys, raw receipts, validator config,
 stdout, stderr, or traces. It records only an allowlist of canonical status and
@@ -17,19 +17,21 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
-from genlayer_py import create_account, create_client, studionet
+from genlayer_py import create_account, create_client
+from genlayer_py.chains import studio_devnet
 from genlayer_py.types.transactions import TransactionStatus
 
 
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "contracts" / "presentment_covenant.py"
-EVIDENCE_DIR = ROOT / "docs" / "evidence" / "studionet"
+EVIDENCE_DIR = ROOT / "docs" / "evidence" / "studio-dev"
 EVIDENCE = EVIDENCE_DIR / "deployment.json"
 CHECKPOINT = EVIDENCE_DIR / "deployment-checkpoint.json"
-RPC = studionet.rpc_urls["default"]["http"][0]
-CHAIN_ID = int(studionet.id)
-EXPLORER = "https://explorer-studio.genlayer.com"
-DEPENDS = "py-genlayer:1jb45aa8ynh2a9c9xn3b7qqh8sm5q93hwfp7jqmwsfhh8jpz09h6"
+FEE_PROFILE = ROOT / "config" / "fee-profile.json"
+RPC = studio_devnet.rpc_urls["default"]["http"][0]
+CHAIN_ID = int(studio_devnet.id)
+EXPLORER = "https://explorer-studio-dev.genlayer.com"
+DEPENDS = "py-genlayer:5jycge4q8k23462jtb0b9fyey1s9qz928sz2nbrd9mg4sxqg2qng"
 PAYOUT_WEI = 2 * 10**18
 APPLICANT_FALLBACK = "0x017d13fe11263159470130ec1f2f96879e8fd40c"
 
@@ -75,6 +77,14 @@ def require_key(env: dict[str, str], name: str) -> str:
     return value
 
 
+def require_any_key(env: dict[str, str], *names: str) -> str:
+    for name in names:
+        value = env.get(name, "").strip()
+        if value:
+            return value
+    raise RuntimeError("Missing authorized Studio Dev private-key variable")
+
+
 def json_safe(value: Any) -> Any:
     if isinstance(value, (bytes, bytearray)):
         return "0x" + bytes(value).hex()
@@ -99,6 +109,20 @@ def write_json(path: Path, value: dict[str, Any]) -> None:
 
 def source_hash() -> str:
     return hashlib.sha256(CONTRACT.read_bytes()).hexdigest()
+
+
+def estimate_fees(client: Any) -> tuple[dict[str, Any], dict[str, int]]:
+    profile = json.loads(FEE_PROFILE.read_text(encoding="utf-8"))
+    estimate = client.estimate_transaction_fees(profile)
+    fees = {
+        "distribution": estimate["distribution"],
+        "feeValue": estimate["feeValue"],
+    }
+    safe = {
+        "fee_value_wei": int(estimate["feeValue"]),
+        "profile_sha256": hashlib.sha256(FEE_PROFILE.read_bytes()).hexdigest(),
+    }
+    return fees, safe
 
 
 def safe_receipt(tx: dict[str, Any], operation: str) -> dict[str, Any]:
@@ -160,7 +184,8 @@ def submit_step(client: Any, account: Any, address: str, operation: str, method:
             existing = loaded
     tx_hash = existing.get("transaction_hash")
     if not tx_hash:
-        tx_hash = str(client.write_contract(address, method, account=account, args=args, value=value))
+        fees, safe_fee = estimate_fees(client)
+        tx_hash = str(client.write_contract(address, method, account=account, args=args, value=value, fees=fees))
         write_json(
             CHECKPOINT,
             {
@@ -168,13 +193,14 @@ def submit_step(client: Any, account: Any, address: str, operation: str, method:
                 "transaction_hash": tx_hash,
                 "status": "SUBMITTED",
                 "source_sha256": source_hash(),
-                "network": "studionet",
+                "network": "studio-dev",
                 "chain_id": CHAIN_ID,
+                "fee_estimate": safe_fee,
                 "submitted_at_utc": datetime.now(timezone.utc).isoformat(),
             },
         )
     safe, _ = wait_finalized(client, tx_hash, operation)
-    write_json(CHECKPOINT, {**safe, "source_sha256": source_hash(), "network": "studionet", "chain_id": CHAIN_ID})
+    write_json(CHECKPOINT, {**safe, "source_sha256": source_hash(), "network": "studio-dev", "chain_id": CHAIN_ID})
     if safe["leader_execution_result"] != "SUCCESS":
         raise RuntimeError(f"{operation} finalized without successful execution")
     return safe
@@ -182,14 +208,14 @@ def submit_step(client: Any, account: Any, address: str, operation: str, method:
 
 def main() -> int:
     env = load_env()
-    issuer = create_account(require_key(env, "STUDIONET_PRIVATE_KEY"))
-    beneficiary = create_account(require_key(env, "STUDIONET_INTEGRATOR_PRIVATE_KEY"))
+    issuer = create_account(require_any_key(env, "STUDIO_DEV_PRIVATE_KEY", "STUDIONET_PRIVATE_KEY"))
+    beneficiary = create_account(require_any_key(env, "STUDIO_DEV_INTEGRATOR_PRIVATE_KEY", "STUDIONET_INTEGRATOR_PRIVATE_KEY"))
     issuer_address = issuer.address
     beneficiary_address = beneficiary.address
     if issuer_address.lower() == beneficiary_address.lower():
         raise RuntimeError("issuer and beneficiary must be distinct")
 
-    client = create_client(chain=studionet, endpoint=RPC, account=issuer)
+    client = create_client(chain=studio_devnet, endpoint=RPC, account=issuer)
     current_source_hash = source_hash()
     existing = json.loads(EVIDENCE.read_text(encoding="utf-8")) if EVIDENCE.exists() else {}
     if existing.get("contract_address") and existing.get("source_sha256") != current_source_hash:
@@ -211,15 +237,16 @@ def main() -> int:
         deadlines = [
             (now + timedelta(minutes=30)).isoformat().replace("+00:00", "Z"),
             (now + timedelta(minutes=45)).isoformat().replace("+00:00", "Z"),
+            (now + timedelta(minutes=180)).isoformat().replace("+00:00", "Z"),
             (now + timedelta(minutes=90)).isoformat().replace("+00:00", "Z"),
             (now + timedelta(minutes=120)).isoformat().replace("+00:00", "Z"),
             (now + timedelta(minutes=150)).isoformat().replace("+00:00", "Z"),
-            (now + timedelta(minutes=180)).isoformat().replace("+00:00", "Z"),
         ]
         credit_id = f"PC-{now.strftime('%Y%m%dT%H%M%SZ')}"
         if not tx_hash:
             args = [credit_id, applicant, beneficiary_address, *deadlines]
-            tx_hash = str(client.deploy_contract(CONTRACT.read_bytes(), account=issuer, args=args))
+            fees, safe_fee = estimate_fees(client)
+            tx_hash = str(client.deploy_contract(CONTRACT.read_bytes(), account=issuer, args=args, fees=fees))
             write_json(
                 CHECKPOINT,
                 {
@@ -227,8 +254,9 @@ def main() -> int:
                     "transaction_hash": tx_hash,
                     "status": "SUBMITTED",
                     "source_sha256": current_source_hash,
-                    "network": "studionet",
+                    "network": "studio-dev",
                     "chain_id": CHAIN_ID,
+                    "fee_estimate": safe_fee,
                     "issuer": issuer_address,
                     "beneficiary": beneficiary_address,
                     "credit_id": credit_id,
@@ -245,14 +273,14 @@ def main() -> int:
 
         evidence = {
             "status": "DEPLOYED",
-            "network": "studionet",
+            "network": "studio-dev",
             "chain_id": CHAIN_ID,
             "rpc": RPC,
             "explorer": EXPLORER,
             "source_sha256": current_source_hash,
             "depends": DEPENDS,
             "contract_address": address,
-            "contract_explorer": f"{EXPLORER}/contracts/{address}",
+            "contract_explorer": f"{EXPLORER}/address/{address}",
             "credit_id": credit_id,
             "issuer": issuer_address,
             "applicant": applicant,
