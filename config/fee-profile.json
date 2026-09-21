@@ -2,7 +2,7 @@
   "leaderTimeunitsAllocation": 125,
   "validatorTimeunitsAllocation": 250,
   "executionBudgetPerRound": 80000000000000,
-  "totalMessageFees": 0,
+  "totalMessageFees": 10000000000000000,
   "appealRounds": 1,
   "rotations": [1, 1]
 }
