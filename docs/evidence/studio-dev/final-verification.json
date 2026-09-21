@@ -1,0 +1,34 @@
+{
+  "canonical_consequence": {
+    "beneficiary_withdrawable_wei": 0,
+    "issuer_withdrawable_wei": 0,
+    "liability_wei": 0,
+    "state": "CLOSED",
+    "total_withdrawn_wei": 2000000000000000000,
+    "zero_liability": true
+  },
+  "chain_id": 61997,
+  "contract_address": "0xCEF68c363B17E95ca5aCFF8f23d400e044fE0B93",
+  "contract_explorer": "https://explorer-studio-dev.genlayer.com/address/0xCEF68c363B17E95ca5aCFF8f23d400e044fE0B93",
+  "deployment_source_commit": "d6bbaa52443e42bfb95b7f71aaac44e18941efa0",
+  "external_transfer": {
+    "from": "0xCEF68c363B17E95ca5aCFF8f23d400e044fE0B93",
+    "recipient": "0x45aD397c438397A702B53a7499a78D08961D39Db",
+    "receipt_status": 1,
+    "transaction_hash": "0xdf70605873123d7b548826ed609d06e3a12f06dc043a7a6a8acd92461e456c88",
+    "value_wei": 2000000000000000000
+  },
+  "network": "studio-dev",
+  "portal_submit_performed": false,
+  "source_sha256": "12cfc0e00eb8b62f1573880ee666d71cef51495481b9d43cd826b3780f59752f",
+  "status": "SUBMISSION_READY",
+  "transactions": {
+    "activate_credit": "0x6a17e97bed41109103974739a7eefa07a0308ee3536baf4e59fa6c74281c4c98",
+    "adjudicate": "0x53f3772bd0f3ec4e05336c5aee7726dd15fc8741b103623c3be580d7fcd78091",
+    "close_credit": "0x1a5422d4c687c14d23fb4fbfe5692af8649ce4d5c2ce46b913b0a160388f8755",
+    "deploy": "0xb37a369b75a48114981b40e6b53bb2f694a40962ea1fdd31864505fec9329f22",
+    "submit_presentation": "0xf8905af3c99a25be0e279be9304db7da4c3f5f7f4204b3cb64cb3b7c7265d125",
+    "withdraw": "0x633bc5e59f7ba4eddfa1ee7a87e8b353a34c688728d2958b999b5f6d22c73d3a"
+  },
+  "verified_at_utc": "2026-09-21T11:25:16Z"
+}

@@ -16,13 +16,13 @@ pytest tests/direct/ -v
 npm run check
 ```
 
-The contract has 18 public methods (10 views and 8 writes), and the direct suite contains 12 tests. `npm run check` runs the pinned-runner lint, strict typecheck, schema emission, and all direct adversarial tests. The deadline regression tests prove that cures and retries accepted in their respective windows remain adjudicable because `adjudication_deadline` is strictly last. This is the Intelligent Contracts track, so there is deliberately no frontend or frontend build.
+The contract has 18 public methods (10 views and 8 writes), and the direct suite contains 13 tests. `npm run check` runs the pinned-runner lint, strict typecheck, schema emission, direct adversarial tests, and deployment-evidence parser tests. The deadline regression tests prove that cures and retries accepted in their respective windows remain adjudicable because `adjudication_deadline` is strictly last. This is the Intelligent Contracts track, so there is deliberately no frontend or frontend build.
 
 ## Studio Dev revision
 
-The active target is Studio Dev (chain 61997) with the Consensus v0.6 RC-compatible contract API and fee profile. The read-only target schema preflight matches the local schema. Live deployment evidence is intentionally added only after the corrected source is committed and the finalized Studio Dev state has been read back.
+The active Studio Dev deployment is [`0xCEF68c363B17E95ca5aCFF8f23d400e044fE0B93`](https://explorer-studio-dev.genlayer.com/address/0xCEF68c363B17E95ca5aCFF8f23d400e044fE0B93) on chain 61997. It was deployed from source SHA-256 `12cfc0e00eb8b62f1573880ee666d71cef51495481b9d43cd826b3780f59752f`, committed at [`d6bbaa5`](https://github.com/duclucky/presentment-covenant/commit/d6bbaa52443e42bfb95b7f71aaac44e18941efa0). The finalized lifecycle reached `COMPLIANT`, transferred exactly 2 GEN to the beneficiary through a finalized EVM message, and closed with zero liability.
 
-The current preflight record is [`docs/evidence/studio-dev/target-network-preflight.json`](docs/evidence/studio-dev/target-network-preflight.json). Files under `docs/evidence/studionet/` are retained only as historical evidence for the superseded legacy revision and must not be mixed with Studio Dev claims.
+Sanitized evidence is in [`deployment.json`](docs/evidence/studio-dev/deployment.json), [`final-verification.json`](docs/evidence/studio-dev/final-verification.json), and [`target-network-preflight.json`](docs/evidence/studio-dev/target-network-preflight.json). Files under `docs/evidence/studionet/` and archived Studio Dev revisions are historical only and must not be mixed with active claims.
 
 ## Reuse
 

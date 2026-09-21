@@ -210,6 +210,23 @@ def read_views(client: Any, address: str, beneficiary: str, issuer: str) -> dict
     }
 
 
+def canonical_lifecycle_status(views: dict[str, Any]) -> str:
+    state = (views.get("credit") or {}).get("state")
+    accounting = views.get("accounting") or {}
+    if state == "CLOSED":
+        if (
+            accounting.get("zero_liability") is True
+            and accounting.get("total_withdrawn") == PAYOUT_WEI
+            and views.get("beneficiary_withdrawable_wei") == 0
+            and views.get("issuer_withdrawable_wei") == 0
+        ):
+            return "LIFECYCLE_SUCCESS"
+        return "INVALID_TERMINAL_ACCOUNTING"
+    if state in ("COMPLIANT", "WITHDRAWN"):
+        return "LIFECYCLE_IN_PROGRESS"
+    return "LIFECYCLE_FINALIZED_NON_CONSEQUENTIAL"
+
+
 def submit_step(client: Any, account: Any, address: str, operation: str, method: str, args: list[Any], value: int = 0) -> dict[str, Any]:
     existing: dict[str, Any] = {}
     if CHECKPOINT.exists():
@@ -343,8 +360,9 @@ def main() -> int:
     evidence.setdefault("transactions", {})
     evidence.setdefault("canonical_reads", {})
     evidence["transactions"]["activate_credit"] = ensure_step("activate_credit", issuer, "activate_credit", [], PAYOUT_WEI)
-    evidence["canonical_reads"]["after_activation"] = read_views(client, address, beneficiary_address, issuer_address)
-    if evidence["canonical_reads"]["after_activation"]["credit"]["state"] == "DRAFT":
+    current_views = read_views(client, address, beneficiary_address, issuer_address)
+    evidence["canonical_reads"].setdefault("after_activation", current_views)
+    if current_views["credit"]["state"] == "DRAFT":
         raise RuntimeError("activation finalized without leaving canonical DRAFT state")
     write_json(EVIDENCE, evidence)
 
@@ -362,42 +380,47 @@ def main() -> int:
     evidence["transactions"]["submit_presentation"] = ensure_step(
         "submit_presentation", beneficiary, "submit_presentation", ["PRES-001", "INV-PC-001", invoice_bytes, invoice_digest]
     )
-    evidence["canonical_reads"]["after_presentation"] = read_views(client, address, beneficiary_address, issuer_address)
-    if evidence["canonical_reads"]["after_presentation"]["credit"]["state"] in ("DRAFT", "ACTIVE"):
+    current_views = read_views(client, address, beneficiary_address, issuer_address)
+    evidence["canonical_reads"].setdefault("after_presentation", current_views)
+    if current_views["credit"]["state"] in ("DRAFT", "ACTIVE"):
         raise RuntimeError("presentation finalized without reaching or passing PRESENTED state")
     write_json(EVIDENCE, evidence)
 
     evidence["transactions"]["adjudicate"] = ensure_step("adjudicate", issuer, "adjudicate", [])
-    after_adjudication = read_views(client, address, beneficiary_address, issuer_address)
-    evidence["canonical_reads"]["after_adjudication"] = after_adjudication
-    state = (after_adjudication.get("credit") or {}).get("state")
+    current_views = read_views(client, address, beneficiary_address, issuer_address)
+    evidence["canonical_reads"].setdefault("after_adjudication", current_views)
+    state = (current_views.get("credit") or {}).get("state")
 
     # Continue only from the finalized canonical state; never replay a write.
     if state == "COMPLIANT":
         evidence["transactions"]["withdraw"] = ensure_step("withdraw", beneficiary, "withdraw", [])
-        evidence["canonical_reads"]["after_withdraw"] = read_views(client, address, beneficiary_address, issuer_address)
-        after_withdraw = evidence["canonical_reads"]["after_withdraw"]
+        current_views = read_views(client, address, beneficiary_address, issuer_address)
+        evidence["canonical_reads"].setdefault("after_withdraw", current_views)
+        after_withdraw = current_views
         if (
-            after_withdraw["credit"]["state"] != "WITHDRAWN"
+            after_withdraw["credit"]["state"] not in ("WITHDRAWN", "CLOSED")
             or after_withdraw["beneficiary_withdrawable_wei"] != 0
         ):
             raise RuntimeError("withdraw finalized without canonical debit and WITHDRAWN state")
+        state = after_withdraw["credit"]["state"]
+    if state == "WITHDRAWN":
         evidence["transactions"]["close_credit"] = ensure_step("close_credit", issuer, "close_credit", [])
-        evidence["canonical_reads"]["after_close"] = read_views(client, address, beneficiary_address, issuer_address)
-        after_close = evidence["canonical_reads"]["after_close"]
-        if (
-            after_close["credit"]["state"] != "CLOSED"
-            or not after_close["accounting"]["zero_liability"]
-        ):
-            raise RuntimeError("close finalized without canonical zero-liability CLOSED state")
-        evidence["status"] = "LIFECYCLE_SUCCESS"
-    else:
-        evidence["status"] = "LIFECYCLE_FINALIZED_NON_CONSEQUENTIAL"
+        current_views = read_views(client, address, beneficiary_address, issuer_address)
+        evidence["canonical_reads"].setdefault("after_close", current_views)
+
+    final_views = read_views(client, address, beneficiary_address, issuer_address)
+    evidence["canonical_reads"]["final"] = final_views
+    evidence["status"] = canonical_lifecycle_status(final_views)
+    if evidence["status"] == "INVALID_TERMINAL_ACCOUNTING":
+        raise RuntimeError("closed credit has invalid terminal accounting")
+    if evidence["status"] == "LIFECYCLE_FINALIZED_NON_CONSEQUENTIAL":
         evidence["resume_condition"] = "Fresh authoritative compatibility evidence is required before retrying UNVERIFIABLE; DISCREPANT requires applicant waiver or beneficiary cure within locked deadlines."
+    else:
+        evidence.pop("resume_condition", None)
 
     write_json(EVIDENCE, evidence)
     CHECKPOINT.unlink(missing_ok=True)
-    print(json.dumps({"status": evidence["status"], "contract_address": address, "state": state}, sort_keys=True))
+    print(json.dumps({"status": evidence["status"], "contract_address": address, "state": final_views["credit"]["state"]}, sort_keys=True))
     return 0
 
 
