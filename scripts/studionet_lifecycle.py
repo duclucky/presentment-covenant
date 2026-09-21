@@ -19,9 +19,6 @@ from typing import Any
 
 from genlayer_py import create_account, create_client
 from genlayer_py.chains import studio_devnet
-from genlayer_py.types.transactions import TransactionStatus
-
-
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "contracts" / "presentment_covenant.py"
 EVIDENCE_DIR = ROOT / "docs" / "evidence" / "studio-dev"
@@ -131,12 +128,15 @@ def safe_receipt(tx: dict[str, Any], operation: str) -> dict[str, Any]:
     counts = Counter(str(v).lower() for v in votes.values())
     leaders = consensus.get("leader_receipt") or []
     execution_results = [str(item.get("execution_result")) for item in leaders if isinstance(item, dict) and item.get("execution_result")]
-    leader_execution_result = execution_results[0] if execution_results else "UNKNOWN"
-    data = tx.get("data") or {}
+    leader_execution_result = str(tx.get("tx_execution_result_name") or "")
+    if not leader_execution_result:
+        leader_execution_result = execution_results[0] if execution_results else "UNKNOWN"
+    data = tx.get("data") or tx.get("tx_data_decoded") or {}
+    lifecycle = tx.get("lifecycle") or {}
     return {
         "operation": operation,
         "transaction_hash": str(tx.get("hash", "")),
-        "status": str(tx.get("status_name", "UNKNOWN")),
+        "status": str(lifecycle.get("state", "UNKNOWN")).upper(),
         "result": str(tx.get("result_name", "UNKNOWN")),
         "leader_execution_result": leader_execution_result,
         "additional_execution_results": execution_results[1:],
@@ -147,9 +147,8 @@ def safe_receipt(tx: dict[str, Any], operation: str) -> dict[str, Any]:
 
 
 def wait_finalized(client: Any, tx_hash: str, operation: str) -> tuple[dict[str, Any], dict[str, Any]]:
-    receipt = client.wait_for_transaction_receipt(
+    client.wait_for_finalization(
         tx_hash,
-        status=TransactionStatus.FINALIZED,
         interval=5000,
         retries=120,
         full_transaction=True,
