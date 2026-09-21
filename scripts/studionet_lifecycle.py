@@ -19,12 +19,6 @@ from typing import Any
 
 from genlayer_py import create_account, create_client
 from genlayer_py.chains import studio_devnet
-from genlayer_py.transactions.fees import (
-    CALL_KEY_WILDCARD,
-    MESSAGE_ALLOCATION_ROOT_PARENT_INDEX,
-    MessageType,
-    encode_external_message_fee_params,
-)
 ROOT = Path(__file__).resolve().parents[1]
 CONTRACT = ROOT / "contracts" / "presentment_covenant.py"
 EVIDENCE_DIR = ROOT / "docs" / "evidence" / "studio-dev"
@@ -114,30 +108,8 @@ def source_hash() -> str:
     return hashlib.sha256(CONTRACT.read_bytes()).hexdigest()
 
 
-def estimate_fees(
-    client: Any, operation: str = "", message_recipient: str = ""
-) -> tuple[dict[str, Any], dict[str, int]]:
+def estimate_fees(client: Any) -> tuple[dict[str, Any], dict[str, int]]:
     profile = json.loads(FEE_PROFILE.read_text(encoding="utf-8"))
-    if operation == "withdraw":
-        if not message_recipient:
-            raise RuntimeError("withdraw fee estimate requires its exact recipient")
-        gas_limit = 100_000
-        max_gas_price = max(int(client.w3.eth.gas_price) * 2, 1)
-        message_budget = gas_limit * max_gas_price
-        profile["totalMessageFees"] = message_budget
-        profile["messageAllocations"] = [
-            {
-                "messageType": int(MessageType.External),
-                "onAcceptance": False,
-                "parentIndex": MESSAGE_ALLOCATION_ROOT_PARENT_INDEX,
-                "recipient": message_recipient,
-                "callKey": CALL_KEY_WILDCARD,
-                "budget": message_budget,
-                "feeParams": encode_external_message_fee_params(
-                    {"gasLimit": gas_limit, "maxGasPrice": max_gas_price}
-                ),
-            }
-        ]
     estimate = client.estimate_transaction_fees(profile)
     fees = {
         "distribution": estimate["distribution"],
@@ -149,6 +121,38 @@ def estimate_fees(
         "fee_value_wei": int(estimate["feeValue"]),
         "profile_sha256": hashlib.sha256(FEE_PROFILE.read_bytes()).hexdigest(),
         "message_allocation_count": len(estimate.get("messageAllocations") or []),
+    }
+    return fees, safe
+
+
+def estimate_write_fees(
+    client: Any,
+    address: str,
+    account: Any,
+    method: str,
+    args: list[Any],
+    value: int,
+) -> tuple[dict[str, Any], dict[str, int]]:
+    profile = json.loads(FEE_PROFILE.read_text(encoding="utf-8"))
+    estimate = client.estimate_transaction_fees_for_write(
+        address=address,
+        function_name=method,
+        account=account,
+        args=args,
+        value=value,
+        options=profile,
+    )
+    fees = {
+        "distribution": estimate["distribution"],
+        "feeValue": estimate["feeValue"],
+    }
+    if estimate.get("messageAllocations") is not None:
+        fees["messageAllocations"] = estimate["messageAllocations"]
+    safe = {
+        "fee_value_wei": int(estimate["feeValue"]),
+        "profile_sha256": hashlib.sha256(FEE_PROFILE.read_bytes()).hexdigest(),
+        "message_allocation_count": len(estimate.get("messageAllocations") or []),
+        "source": "studio_target_write_estimate",
     }
     return fees, safe
 
@@ -214,7 +218,9 @@ def submit_step(client: Any, account: Any, address: str, operation: str, method:
             existing = loaded
     tx_hash = existing.get("transaction_hash")
     if not tx_hash:
-        fees, safe_fee = estimate_fees(client, operation, account.address)
+        fees, safe_fee = estimate_write_fees(
+            client, address, account, method, args, value
+        )
         tx_hash = str(client.write_contract(address, method, account=account, args=args, value=value, fees=fees))
         write_json(
             CHECKPOINT,

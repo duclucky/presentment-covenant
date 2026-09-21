@@ -79,6 +79,15 @@ def _normalize_verdict(value: object) -> dict:
     }
 
 
+@gl.evm.contract_interface
+class _EoaRecipient:
+    class View:
+        pass
+
+    class Write:
+        pass
+
+
 class PresentmentCovenant(gl.contract.Contract):
     issuer: Address
     applicant: Address
@@ -538,7 +547,7 @@ class PresentmentCovenant(gl.contract.Contract):
         else:
             _error("[EXPECTED] ", "withdrawal state mismatch")
         self.total_withdrawn = self.total_withdrawn + amount
-        gl.contract.get_at(sender).emit_transfer(amount)
+        _EoaRecipient(sender).emit_transfer(value=amount)
 
     @gl.public.write
     def close_credit(self) -> None:

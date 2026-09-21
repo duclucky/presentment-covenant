@@ -1,6 +1,14 @@
 import hashlib
+from pathlib import Path
 
 from .conftest import SOURCE_BYTES, activate, address_text, deploy_contract, present, valid_invoice
+
+
+def test_withdraw_uses_finalized_evm_transfer_for_eoa() -> None:
+    source = Path("contracts/presentment_covenant.py").read_text(encoding="utf-8")
+    assert "@gl.evm.contract_interface" in source
+    assert "_EoaRecipient(sender).emit_transfer(value=amount)" in source
+    assert "gl.contract.get_at(sender).emit_transfer" not in source
 
 
 def deploy_with_final_adjudication_deadline(
