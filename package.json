@@ -5,7 +5,7 @@
   "description": "Documentary presentment covenant intelligent contract",
   "scripts": {
     "check": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/check.ps1",
-    "test:direct": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PYTHONUTF8='1'; .\\.venv\\Scripts\\python.exe -m pytest tests/direct/ -q -p no:cacheprovider\"",
+    "test:direct": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PYTHONUTF8='1'; .\\.venv\\Scripts\\python.exe -m pytest tests/ -q -p no:cacheprovider\"",
     "lint:contract": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PYTHONUTF8='1'; $env:GENVM_VERSION='v0.6.0-rc5'; .\\.venv\\Scripts\\genvm-lint.exe check contracts/presentment_covenant.py --json\"",
     "schema": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$env:PYTHONUTF8='1'; $env:GENVM_VERSION='v0.6.0-rc5'; New-Item -ItemType Directory -Force .gltest-artifacts | Out-Null; .\\.venv\\Scripts\\genvm-lint.exe schema contracts/presentment_covenant.py --json --output .gltest-artifacts/presentment_covenant.schema.json\""
   }

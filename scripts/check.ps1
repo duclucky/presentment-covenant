@@ -18,7 +18,7 @@ New-Item -ItemType Directory -Force .gltest-artifacts | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "genvm-lint schema failed" }
 
 Write-Host "[4/4] Direct-mode adversarial lifecycle tests"
-& $python -m pytest tests/direct/ -q -p no:cacheprovider
+& $python -m pytest tests/ -q -p no:cacheprovider
 if ($LASTEXITCODE -ne 0) { throw "direct tests failed" }
 
 Write-Host "Contract checks passed. Track is Intelligent Contracts; no frontend build is in scope."

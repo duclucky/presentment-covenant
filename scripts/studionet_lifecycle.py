@@ -128,9 +128,8 @@ def safe_receipt(tx: dict[str, Any], operation: str) -> dict[str, Any]:
     counts = Counter(str(v).lower() for v in votes.values())
     leaders = consensus.get("leader_receipt") or []
     execution_results = [str(item.get("execution_result")) for item in leaders if isinstance(item, dict) and item.get("execution_result")]
-    leader_execution_result = str(tx.get("tx_execution_result_name") or "")
-    if not leader_execution_result:
-        leader_execution_result = execution_results[0] if execution_results else "UNKNOWN"
+    normalized_execution_result = str(tx.get("tx_execution_result_name") or "UNKNOWN")
+    leader_execution_result = execution_results[0] if execution_results else normalized_execution_result
     data = tx.get("data") or tx.get("tx_data_decoded") or {}
     lifecycle = tx.get("lifecycle") or {}
     return {
@@ -139,6 +138,7 @@ def safe_receipt(tx: dict[str, Any], operation: str) -> dict[str, Any]:
         "status": str(lifecycle.get("state", "UNKNOWN")).upper(),
         "result": str(tx.get("result_name", "UNKNOWN")),
         "leader_execution_result": leader_execution_result,
+        "normalized_execution_result": normalized_execution_result,
         "additional_execution_results": execution_results[1:],
         "vote_counts": dict(sorted(counts.items())),
         "contract_address": data.get("contract_address"),
